@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     style="@style/MainTheme"
-    tools:context="cloud.safe.com.kuchmynda.mark.safecloud.Fragments.GalleryFragment">
+    tools:context=".Views.Fragments.GalleryFragment">
             <ListView
             android:layout_width="match_parent"
             android:layout_height="match_parent"

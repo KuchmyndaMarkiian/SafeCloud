@@ -1,4 +1,4 @@
-package cloud.safe.com.kuchmynda.mark.safecloud.CustomControls;
+package cloud.safe.com.kuchmynda.mark.safecloud.UI.CustomControls;
 
 import android.content.Context;
 import android.view.View;

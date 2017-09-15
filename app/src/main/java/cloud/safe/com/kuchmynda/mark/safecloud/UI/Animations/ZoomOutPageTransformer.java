@@ -1,4 +1,4 @@
-package cloud.safe.com.kuchmynda.mark.safecloud.Animations;
+package cloud.safe.com.kuchmynda.mark.safecloud.UI.Animations;
 
 import android.support.v4.view.ViewPager;
 import android.view.View;

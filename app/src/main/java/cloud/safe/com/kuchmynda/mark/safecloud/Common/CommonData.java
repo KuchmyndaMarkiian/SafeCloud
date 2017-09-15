@@ -1,7 +1,7 @@
 package cloud.safe.com.kuchmynda.mark.safecloud.Common;
 
 /**
- * Created by MARKAN on 14.09.2017.
+ * Created by Markiian Kuchmynda on 14.09.2017.
  */
 
 public class CommonData {

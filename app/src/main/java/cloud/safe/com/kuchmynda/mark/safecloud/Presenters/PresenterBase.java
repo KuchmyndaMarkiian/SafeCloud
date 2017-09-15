@@ -16,5 +16,5 @@ public abstract class PresenterBase<T extends ComponentCallbacks> {
 
     protected abstract void execute();
     protected abstract void initModel();
-    protected abstract void errorHandler();
+    protected abstract void errorHandler(String message);
 }

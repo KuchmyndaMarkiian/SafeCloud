@@ -1,8 +1,7 @@
-package cloud.safe.com.kuchmynda.mark.safecloud.Fragments;
+package cloud.safe.com.kuchmynda.mark.safecloud.Views.Fragments;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,12 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.mvc.imagepicker.ImagePicker;
 
 import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
 
 import cloud.safe.com.kuchmynda.mark.safecloud.Presenters.RegistrationPresenter;
 import cloud.safe.com.kuchmynda.mark.safecloud.R;

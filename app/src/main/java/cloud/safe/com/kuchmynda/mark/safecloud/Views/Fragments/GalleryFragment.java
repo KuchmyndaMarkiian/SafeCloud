@@ -1,26 +1,22 @@
-package cloud.safe.com.kuchmynda.mark.safecloud.Fragments;
+package cloud.safe.com.kuchmynda.mark.safecloud.Views.Fragments;
 
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 
-import cloud.safe.com.kuchmynda.mark.safecloud.Activities.NavigationDrawerActivity;
-import cloud.safe.com.kuchmynda.mark.safecloud.Adapters.GalleryAdapter;
+import cloud.safe.com.kuchmynda.mark.safecloud.Views.Activities.NavigationDrawerActivity;
+import cloud.safe.com.kuchmynda.mark.safecloud.Infrastructure.Adapters.GalleryAdapter;
 import cloud.safe.com.kuchmynda.mark.safecloud.Models.GalleryItemModel;
 import cloud.safe.com.kuchmynda.mark.safecloud.R;
 

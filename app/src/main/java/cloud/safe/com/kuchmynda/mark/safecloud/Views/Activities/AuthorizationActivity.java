@@ -1,4 +1,4 @@
-package cloud.safe.com.kuchmynda.mark.safecloud.Activities;
+package cloud.safe.com.kuchmynda.mark.safecloud.Views.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,10 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 import com.rd.PageIndicatorView;
 import com.rd.animation.type.AnimationType;
 
-import cloud.safe.com.kuchmynda.mark.safecloud.Adapters.TabPagerAdapter;
-import cloud.safe.com.kuchmynda.mark.safecloud.Animations.ZoomOutPageTransformer;
-import cloud.safe.com.kuchmynda.mark.safecloud.Fragments.LoginFragment;
-import cloud.safe.com.kuchmynda.mark.safecloud.Fragments.RegisterFragment;
+import cloud.safe.com.kuchmynda.mark.safecloud.Infrastructure.Adapters.TabPagerAdapter;
+import cloud.safe.com.kuchmynda.mark.safecloud.UI.Animations.ZoomOutPageTransformer;
+import cloud.safe.com.kuchmynda.mark.safecloud.Views.Fragments.LoginFragment;
+import cloud.safe.com.kuchmynda.mark.safecloud.Views.Fragments.RegisterFragment;
 import cloud.safe.com.kuchmynda.mark.safecloud.R;
 
 import static cloud.safe.com.kuchmynda.mark.safecloud.Common.CommonData.IMAGE_PICK;

@@ -3,7 +3,7 @@ package cloud.safe.com.kuchmynda.mark.safecloud.Presenters;
 import android.text.TextUtils;
 import android.widget.Toast;
 
-import cloud.safe.com.kuchmynda.mark.safecloud.Fragments.RegisterFragment;
+import cloud.safe.com.kuchmynda.mark.safecloud.Views.Fragments.RegisterFragment;
 import cloud.safe.com.kuchmynda.mark.safecloud.Models.Authorization.RegisterModel;
 
 /**
@@ -25,8 +25,8 @@ public class RegistrationPresenter extends PresenterBase<RegisterFragment> {
     }
 
     @Override
-    protected void errorHandler() {
-        Toast.makeText(view.getActivity(), "Empty data or picture isn`t selected", Toast.LENGTH_SHORT).show();
+    protected void errorHandler(String message) {
+        Toast.makeText(view.getActivity(), message, Toast.LENGTH_SHORT).show();
     }
 
     public void setLogin(String text) {
@@ -63,7 +63,7 @@ public class RegistrationPresenter extends PresenterBase<RegisterFragment> {
                 TextUtils.isEmpty(registerModel.getConfirmPassword()) ||
                 (registerModel.getAvatar() == null || registerModel.getAvatar().length <= 0)
                 ) {
-            errorHandler();
+            errorHandler("Empty data or picture isn`t selected");
         } else {
             Toast.makeText(view.getActivity(), "Register test", Toast.LENGTH_SHORT).show();
         }

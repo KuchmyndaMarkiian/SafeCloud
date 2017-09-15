@@ -1,16 +1,12 @@
-package cloud.safe.com.kuchmynda.mark.safecloud.Adapters;
+package cloud.safe.com.kuchmynda.mark.safecloud.Infrastructure.Adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.util.ArrayMap;
 import android.util.SparseArray;
 
 import java.util.AbstractMap;
 import java.util.Map;
-
-import cloud.safe.com.kuchmynda.mark.safecloud.Fragments.LoginFragment;
-import cloud.safe.com.kuchmynda.mark.safecloud.Fragments.RegisterFragment;
 
 public class TabPagerAdapter extends FragmentPagerAdapter {
     SparseArray<Map.Entry<String, Fragment>> tabs;

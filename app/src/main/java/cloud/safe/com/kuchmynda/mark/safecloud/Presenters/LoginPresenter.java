@@ -1,9 +1,26 @@
 package cloud.safe.com.kuchmynda.mark.safecloud.Presenters;
 
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.widget.Toast;
 
-import cloud.safe.com.kuchmynda.mark.safecloud.Fragments.LoginFragment;
+import com.google.gson.Gson;
+
+import java.util.concurrent.ExecutionException;
+
+import cloud.safe.com.kuchmynda.mark.safecloud.Common.ApiConnection;
+import cloud.safe.com.kuchmynda.mark.safecloud.Common.CommonData;
+import cloud.safe.com.kuchmynda.mark.safecloud.Infrastructure.Helpers.DialogInitializator;
+import cloud.safe.com.kuchmynda.mark.safecloud.Infrastructure.Services.AuthorizationService;
+import cloud.safe.com.kuchmynda.mark.safecloud.Infrastructure.Token;
+import cloud.safe.com.kuchmynda.mark.safecloud.Infrastructure.UserAccount;
+import cloud.safe.com.kuchmynda.mark.safecloud.R;
+import cloud.safe.com.kuchmynda.mark.safecloud.Views.Activities.NavigationDrawerActivity;
+import cloud.safe.com.kuchmynda.mark.safecloud.Views.Fragments.GalleryFragment;
+import cloud.safe.com.kuchmynda.mark.safecloud.Views.Fragments.LoginFragment;
 import cloud.safe.com.kuchmynda.mark.safecloud.Models.Authorization.LoginModel;
 
 /**
@@ -26,8 +43,13 @@ public class LoginPresenter extends PresenterBase<LoginFragment> {
     }
 
     @Override
-    protected void errorHandler() {
-        Toast.makeText(view.getActivity(), "Empty fields", Toast.LENGTH_SHORT).show();
+    protected void errorHandler(final String message) {
+        view.getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(view.getActivity(), message, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public void setLogin(String text) {
@@ -42,9 +64,55 @@ public class LoginPresenter extends PresenterBase<LoginFragment> {
 
     public void signIn() {
         if (loginModel == null || TextUtils.isEmpty(loginModel.getEmail()) || TextUtils.isEmpty(loginModel.getPassword())) {
-            errorHandler();
+            errorHandler("Empty fields");
         } else {
-            Toast.makeText(view.getActivity(), "Login test", Toast.LENGTH_SHORT).show();
+            SignInAsyncTask signInAsyncTask = new SignInAsyncTask(view.getActivity());
+            signInAsyncTask.execute(loginModel);
+        }
+    }
+
+    private class SignInAsyncTask extends AsyncTask<LoginModel, Void, Token> {
+        private final Activity activity;
+        AuthorizationService service;
+
+        SignInAsyncTask(Activity activity) {
+            this.activity = activity;
+        }
+
+        Dialog dialog;
+
+        @Override
+        protected void onPreExecute() {
+            dialog = new Dialog(activity);
+            DialogInitializator.initializeLoadingDialog(dialog);
+            dialog.show();
+        }
+
+        @Override
+        protected void onPostExecute(Token token) {
+            super.onPostExecute(token);
+            dialog.dismiss();
+            if (token == null) {
+                errorHandler(service.getError());
+            } else {
+                UserAccount.getCurrentAccount().setToken(token);
+                Intent intent=new Intent(activity, NavigationDrawerActivity.class);
+                intent.putExtra(CommonData.FRAGMENT_EXTRA, GalleryFragment.ID);
+                activity.startActivity(intent);
+                activity.finish();
+            }
+        }
+
+        @Override
+        protected Token doInBackground(LoginModel... params) {
+            service = new AuthorizationService(ApiConnection.ServerAdress);
+            if (service.signIn(ApiConnection.LoginAdress, params[0])) {
+                Gson gson = new Gson();
+                String body=service.getLastResponseBody();
+                Token token = gson.fromJson(body, Token.class);
+                return token;
+            }
+            return null;
         }
     }
 }

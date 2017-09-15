@@ -1,4 +1,4 @@
-package cloud.safe.com.kuchmynda.mark.safecloud.Fragments;
+package cloud.safe.com.kuchmynda.mark.safecloud.Views.Fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;

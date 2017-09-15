@@ -1,4 +1,4 @@
-package cloud.safe.com.kuchmynda.mark.safecloud.Activities;
+package cloud.safe.com.kuchmynda.mark.safecloud.Views.Activities;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -10,14 +10,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
-import cloud.safe.com.kuchmynda.mark.safecloud.Fragments.GalleryFragment;
-import cloud.safe.com.kuchmynda.mark.safecloud.Fragments.PhotosFragment;
+import cloud.safe.com.kuchmynda.mark.safecloud.Views.Fragments.GalleryFragment;
+import cloud.safe.com.kuchmynda.mark.safecloud.Views.Fragments.PhotosFragment;
 import cloud.safe.com.kuchmynda.mark.safecloud.R;
 
 import static cloud.safe.com.kuchmynda.mark.safecloud.Common.CommonData.FRAGMENT_EXTRA;
-import static cloud.safe.com.kuchmynda.mark.safecloud.Common.CommonData.SERIALIZABLE_EXTRA;
 
 public class NavigationDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{

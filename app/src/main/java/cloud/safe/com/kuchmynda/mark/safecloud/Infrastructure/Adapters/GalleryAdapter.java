@@ -1,15 +1,14 @@
-package cloud.safe.com.kuchmynda.mark.safecloud.Adapters;
+package cloud.safe.com.kuchmynda.mark.safecloud.Infrastructure.Adapters;
 
 import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ListAdapter;
 
 import java.util.ArrayList;
 
-import cloud.safe.com.kuchmynda.mark.safecloud.CustomControls.GalleryItem;
+import cloud.safe.com.kuchmynda.mark.safecloud.UI.CustomControls.GalleryItem;
 import cloud.safe.com.kuchmynda.mark.safecloud.Models.GalleryItemModel;
 
 /**
