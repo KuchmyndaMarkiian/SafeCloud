@@ -1,0 +1,64 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+
+    <style name="MainTheme" parent="AppTheme.NoActionBar">
+        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="android:colorAccent">@color/colorAccent</item>
+        <item name="android:textColorPrimary">#ffffff</item>
+
+        <item name="android:windowContentTransitions">true</item>
+
+        <item name="android:windowEnterTransition">@android:transition/slide_right</item>
+        <item name="android:windowExitTransition">@android:transition/slide_left</item>
+
+        <item name="android:windowAllowEnterTransitionOverlap">true</item>
+        <item name="android:windowAllowReturnTransitionOverlap">true</item>
+        <item name="android:windowSharedElementEnterTransition">@android:transition/move</item>
+        <item name="android:windowSharedElementExitTransition">@android:transition/move</item>
+    </style>
+
+    <style name="NavHeaderStyle">
+        <item name="android:padding">16dp</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:background">@drawable/navheader</item>
+    </style>
+
+    <style name="ButtonBase">
+        <item name="android:background">@drawable/buttonbase</item>
+        <item name="android:textColor">#ffffff</item>
+    </style>
+
+    <style name="AppBarComponent">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/textColorBase</item>
+        <item name="android:layout_margin">16dp</item>
+        <item name="android:background">@color/colorPrimary</item>
+    </style>
+<style name="ImageViewBackground">
+    <item name="android:radius">6dp</item>
+    <item name="android:background">@drawable/imagepiewphotopack</item>
+</style>
+    <style name="MainTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="MainTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+</resources>

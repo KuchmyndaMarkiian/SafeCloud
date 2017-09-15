@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item android:title="Account"
+            android:id="@+id/navmenu_account"
+            android:icon="@drawable/ic_account_circle_black_48dp"/>
+        <item android:title="Galleries"
+            android:id="@+id/navmenu_gallery"
+            android:icon="@drawable/ic_menu_gallery"/>
+        <item android:title="Log"
+            android:id="@+id/navmenu_log"
+            android:icon="@drawable/ic_menu_share"/>
+        <item android:title="Setting"
+            android:id="@+id/navmenu_setting"
+            android:icon="@drawable/ic_menu_manage"/>
+    </group>
+</menu>

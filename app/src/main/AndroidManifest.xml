@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="cloud.safe.com.kuchmynda.mark.safecloud">
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <uses-permission-sdk-23 android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission-sdk-23 android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission-sdk-23 android:name="android.permission.CAMERA" />
+    <uses-permission-sdk-23 android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_cloud_computing"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/MainTheme">
+        <activity android:name=".Activities.NavigationDrawerActivity">
+        </activity>
+        <activity
+            android:name=".Activities.AuthorizationActivity"
+            android:theme="@style/MainTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
