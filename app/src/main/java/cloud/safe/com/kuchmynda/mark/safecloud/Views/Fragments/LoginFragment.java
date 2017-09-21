@@ -10,6 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import java.io.IOException;
+
+import cloud.safe.com.kuchmynda.mark.safecloud.Infrastructure.Database.SqliteManager;
 import cloud.safe.com.kuchmynda.mark.safecloud.Presenters.LoginPresenter;
 import cloud.safe.com.kuchmynda.mark.safecloud.R;
 
@@ -32,6 +35,12 @@ public class LoginFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (presenter == null) {
             presenter = new LoginPresenter();
+            SqliteManager sqliteManager=new SqliteManager(getContext());
+            try {
+                sqliteManager.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         presenter.takeView(this);
 

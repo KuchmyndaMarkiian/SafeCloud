@@ -25,35 +25,16 @@ public class AuthorizationService {
     public AuthorizationService(String hostUrl) {
         errorModel = new ErrorModel();
         this.hostUrl = hostUrl;
-        httpClient = new OkHttpClient.Builder().connectTimeout(15, TimeUnit.SECONDS).build();
+        httpClient = new OkHttpClient.Builder().connectTimeout(60, TimeUnit.SECONDS).build();
     }
-    public boolean signIn(String url, LoginModel loginModel) {
-        /*Gson gsonConverter = new Gson();
-        FormBody.Builder bodyBuilder=new FormBody.Builder().add("grant_type","password")
-                .add("username",loginModel.getEmail()).add("password",loginModel.getPassword());
-
-        Request.Builder builder = new Request.Builder().url(hostUrl + url)
-                .addHeader("Content-Type",ApiConnection.MimeFormUnlencoded)
-                .addHeader("Accept",ApiConnection.MimeJson)
-                .post(bodyBuilder.build());
-
-        try {
-            response = httpClient.newCall(builder.build()).execute();
-            if(!response.isSuccessful()){
-                throw new Exception(gsonConverter.fromJson(response.body().toString(), ErrorModel.class).errorDescription);
-            }
-            else return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            errorModel.errorDescription=e.getMessage();
-        }*/
-        OkHttpManager manager = new OkHttpManager(ApiConnection.ServerAdress);
+    public boolean signIn(String url,LoginModel loginModel) {
+        OkHttpManager manager = new OkHttpManager(hostUrl);
         manager.putHeaders(new Tuple<>("Content-Type", ApiConnection.MimeFormUnlencoded),
                 new Tuple<>("Accept", ApiConnection.MimeJson));
         manager.putBody(new Tuple<>("grant_type", "password"),
                 new Tuple<>("username", loginModel.getEmail()),
                 new Tuple<>("password", loginModel.getPassword()));
-        manager.post(ApiConnection.LoginAdress);
+        manager.post(url);
         response=manager.getResponse();
         if (manager.isSuccessful()) {
             return true;
@@ -64,29 +45,7 @@ public class AuthorizationService {
     }
 
     public boolean signUp(String url, RegisterModel registerModel) {
-        /*Gson gsonConverter = new Gson();
-        FormBody.Builder bodyBuilder=new FormBody.Builder()
-                .add("Email",registerModel.getEmail())
-                .add("Password",registerModel.getPassword())
-                .add("ConfirmPassword",registerModel.getConfirmPassword())
-                .add("FirstName",registerModel.getFirstName())
-                .add("LastName",registerModel.getLastName());
-
-        Request.Builder builder = new Request.Builder().url(hostUrl + url)
-                .addHeader("Content-Type",ApiConnection.MimeFormUnlencoded)
-                .post(bodyBuilder.build());
-
-        try {
-            response = httpClient.newCall(builder.build()).execute();
-            if(!response.isSuccessful()){
-                throw new Exception(gsonConverter.fromJson(response.body().toString(), ErrorModel.class).errorDescription);
-            }
-            else return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            errorModel.errorDescription=e.getMessage();
-        }*/
-        OkHttpManager manager = new OkHttpManager(ApiConnection.ServerAdress);
+                OkHttpManager manager = new OkHttpManager(hostUrl);
         manager.putHeaders(new Tuple<>("Content-Type", ApiConnection.MimeFormUnlencoded));
         
         manager.putBody(new Tuple<>("grant_type", "password"),
@@ -95,7 +54,7 @@ public class AuthorizationService {
                 new Tuple<>("ConfirmPassword", registerModel.getConfirmPassword()),
                 new Tuple<>("FirstName", registerModel.getFirstName()),
                 new Tuple<>("LastName", registerModel.getLastName()));
-        manager.post(ApiConnection.RegisterAdress);
+        manager.post(url);
         response=manager.getResponse();
         if (manager.isSuccessful()) {
             return true;

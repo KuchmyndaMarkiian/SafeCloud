@@ -11,6 +11,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
+import java.io.IOException;
+
+import cloud.safe.com.kuchmynda.mark.safecloud.Infrastructure.Database.SqliteManager;
 import cloud.safe.com.kuchmynda.mark.safecloud.Views.Fragments.GalleryFragment;
 import cloud.safe.com.kuchmynda.mark.safecloud.Views.Fragments.PhotosFragment;
 import cloud.safe.com.kuchmynda.mark.safecloud.R;
@@ -47,6 +50,9 @@ public class NavigationDrawerActivity extends AppCompatActivity
                 ((DrawerLayout)findViewById(R.id.nav_drawer_layout)).openDrawer(GravityCompat.START);
             }
         });
+
+
+
     }
 
     @Override

@@ -55,6 +55,21 @@ public class OkHttpManager {
 
     public void post(String url) {
         requestBuilder = requestBuilder.url(hostUrl + url).post(requestBody);
+        send();
+    }
+    public void put(String url) {
+        requestBuilder = requestBuilder.url(hostUrl + url).put(requestBody);
+        send();
+    }
+    public void patch(String url) {
+        requestBuilder = requestBuilder.url(hostUrl + url).patch(requestBody);
+        send();
+    }
+    public void delete(String url) {
+        requestBuilder = requestBuilder.url(hostUrl + url).delete(requestBody);
+        send();
+    }
+    private void send(){
         try {
             response = client.newCall(requestBuilder.build()).execute();
             if (!isSuccessful())
@@ -66,6 +81,7 @@ public class OkHttpManager {
             message = e.getMessage();
         }
     }
+
     //todo: need GET/PUT/Patch/DELETE methods
     public String getMessage() {
         return message;

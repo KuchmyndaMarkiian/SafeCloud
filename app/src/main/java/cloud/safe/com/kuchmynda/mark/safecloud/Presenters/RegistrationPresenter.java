@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import cloud.safe.com.kuchmynda.mark.safecloud.Common.ApiConnection;
 import cloud.safe.com.kuchmynda.mark.safecloud.Common.CommonData;
@@ -106,15 +107,25 @@ public class RegistrationPresenter extends PresenterBase<RegisterFragment> {
 
         @Override
         protected void onPreExecute() {
-            dialog = new Dialog(activity);
+            dialog = new Dialog(activity.getApplicationContext());
             DialogInitializator.initializeLoadingDialog(dialog);
-            dialog.show();
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    dialog.show();
+                }
+            });
         }
 
         @Override
         protected void onPostExecute(Token token) {
             super.onPostExecute(token);
-            dialog.dismiss();
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    dialog.dismiss();
+                }
+            });
             if (token == null) {
                 errorHandler(service.getError());
             } else {
@@ -136,7 +147,7 @@ public class RegistrationPresenter extends PresenterBase<RegisterFragment> {
                 if (service.signIn(ApiConnection.LoginAdress, loginModel)) {
                     Gson gson = new Gson();
                     String body = service.getLastResponseBody();
-                    Token token = gson.fromJson(body, Token.class);
+                    Token token = gson.fromJson(body, new TypeToken<Token>(){}.getType());
                     return token;
                 }
             }

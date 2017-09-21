@@ -15,7 +15,7 @@ public class Token {
     private String UserName;
 
     @SerializedName(".expires")
-    private Date Expires;
+    private String Expires;
 
     public String getAccessToken() {
         return AccessToken;
@@ -41,11 +41,11 @@ public class Token {
         UserName = userName;
     }
 
-    public Date getExpires() {
+    public String getExpires() {
         return Expires;
     }
 
-    public void setExpires(Date expires) {
+    public void setExpires(String expires) {
         Expires = expires;
     }
 }

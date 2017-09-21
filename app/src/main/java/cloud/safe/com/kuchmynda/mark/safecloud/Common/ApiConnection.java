@@ -7,8 +7,8 @@ package cloud.safe.com.kuchmynda.mark.safecloud.Common;
 public final class ApiConnection {
     //region URL Constants
 
-    public static String ServerAdress = "http://192.168.75.220:57643";//"http://192.168.0.106:57643";
-
+    public static String ServerAdress = "http://192.168.0.100:57643";
+    //public static String ServerAdress = "http://192.168.75.220:57643";
     //region Authorization
 
     public static String RegisterAdress = "/api/Account/Register";

@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.concurrent.ExecutionException;
 
@@ -109,7 +110,7 @@ public class LoginPresenter extends PresenterBase<LoginFragment> {
             if (service.signIn(ApiConnection.LoginAdress, params[0])) {
                 Gson gson = new Gson();
                 String body=service.getLastResponseBody();
-                Token token = gson.fromJson(body, Token.class);
+                Token token = gson.fromJson(body, new TypeToken<Token>(){}.getType());
                 return token;
             }
             return null;
