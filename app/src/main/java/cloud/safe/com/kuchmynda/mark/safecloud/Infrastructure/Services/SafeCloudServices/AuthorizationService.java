@@ -1,4 +1,4 @@
-package cloud.safe.com.kuchmynda.mark.safecloud.Infrastructure.Services;
+package cloud.safe.com.kuchmynda.mark.safecloud.Infrastructure.Services.SafeCloudServices;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -12,20 +12,18 @@ import okhttp3.OkHttpClient;
 import okhttp3.Response;
 
 /**
- * Created by MARKAN on 15.09.2017.
+ * Created by Markiian Kuchmynda on 15.09.2017.
  */
 
 public class AuthorizationService {
-    OkHttpClient httpClient;
-    String hostUrl;
-    ErrorModel errorModel;
-    Response response;
+    private final String hostUrl;
+    private final ErrorModel errorModel;
+    private Response response;
 
 
     public AuthorizationService(String hostUrl) {
         errorModel = new ErrorModel();
         this.hostUrl = hostUrl;
-        httpClient = new OkHttpClient.Builder().connectTimeout(60, TimeUnit.SECONDS).build();
     }
     public boolean signIn(String url,LoginModel loginModel) {
         OkHttpManager manager = new OkHttpManager(hostUrl);
@@ -47,13 +45,7 @@ public class AuthorizationService {
     public boolean signUp(String url, RegisterModel registerModel) {
                 OkHttpManager manager = new OkHttpManager(hostUrl);
         manager.putHeaders(new Tuple<>("Content-Type", ApiConnection.MimeFormUnlencoded));
-        
-        manager.putBody(new Tuple<>("grant_type", "password"),
-                new Tuple<>("Email", registerModel.getEmail()),
-                new Tuple<>("Password", registerModel.getPassword()),
-                new Tuple<>("ConfirmPassword", registerModel.getConfirmPassword()),
-                new Tuple<>("FirstName", registerModel.getFirstName()),
-                new Tuple<>("LastName", registerModel.getLastName()));
+        manager.putBody(registerModel);
         manager.post(url);
         response=manager.getResponse();
         if (manager.isSuccessful()) {

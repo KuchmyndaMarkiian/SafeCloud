@@ -9,7 +9,7 @@ import java.util.AbstractMap;
 import java.util.Map;
 
 public class TabPagerAdapter extends FragmentPagerAdapter {
-    SparseArray<Map.Entry<String, Fragment>> tabs;
+    private final SparseArray<Map.Entry<String, Fragment>> tabs;
 
     public TabPagerAdapter(FragmentManager fm) {
         super(fm);

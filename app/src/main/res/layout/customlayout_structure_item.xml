@@ -8,14 +8,14 @@
     android:paddingRight="16dp" android:elevation="4dp"
     >
 <ImageView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="54dp"
+    android:layout_height="54dp"
     android:padding="6dp"
     style="@style/ImageViewBackground"
     android:layout_marginRight="16dp"
-    android:id="@+id/galleryitem_icon"
+    android:id="@+id/structure_item_icon"
     android:transitionName="@string/transist3"
-    android:src="@drawable/ic_photo_library_white_48dp"/>
+    android:src="@drawable/ic_folder_white_24px"/>
     <LinearLayout
         android:orientation="vertical"
         android:layout_gravity="center_vertical"
@@ -25,12 +25,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:transitionName="@string/transist1"
-            android:id="@+id/galleryitem_header"
+            android:id="@+id/structure_item_header"
             android:textColor="@color/darkGrayColorBase"
             android:textSize="18sp"/>
         <TextView
             android:transitionName="@string/transist2"
-            android:id="@+id/galleryitem_date"
+            android:id="@+id/structure_item_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/darkGrayColorBase"

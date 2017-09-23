@@ -16,7 +16,7 @@ public class Tuple<F,S> {
         return key;
     }
 
-    public void setKey(F key) {
+    private void setKey(F key) {
         this.key = key;
     }
 
@@ -24,7 +24,7 @@ public class Tuple<F,S> {
         return value;
     }
 
-    public void setValue(S value) {
+    private void setValue(S value) {
         this.value = value;
     }
 }

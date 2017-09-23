@@ -11,48 +11,37 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
-import java.io.IOException;
-
-import cloud.safe.com.kuchmynda.mark.safecloud.Infrastructure.Database.SqliteManager;
-import cloud.safe.com.kuchmynda.mark.safecloud.Views.Fragments.GalleryFragment;
-import cloud.safe.com.kuchmynda.mark.safecloud.Views.Fragments.PhotosFragment;
+import cloud.safe.com.kuchmynda.mark.safecloud.Views.Fragments.StructureFragment;
 import cloud.safe.com.kuchmynda.mark.safecloud.R;
 
-import static cloud.safe.com.kuchmynda.mark.safecloud.Common.CommonData.FRAGMENT_EXTRA;
+import static cloud.safe.com.kuchmynda.mark.safecloud.Common.CommonData.FRAGMENT_ID_EXTRA;
 
 public class NavigationDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
-    DrawerLayout layout;
+    private DrawerLayout layout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation_drawer);
-        int id=getIntent().getIntExtra(FRAGMENT_EXTRA,GalleryFragment.ID);
+        int id=getIntent().getIntExtra(FRAGMENT_ID_EXTRA, StructureFragment.ID);
         Fragment fragment;
-        if(id==GalleryFragment.ID){
-            fragment=new GalleryFragment();
-        }
-        else if(id== PhotosFragment.ID){
-            fragment=new PhotosFragment();
-            Bundle bundle= getIntent().getExtras();
-            fragment.setArguments(bundle);
+        if(id== StructureFragment.ID){
+            fragment=new StructureFragment();
+            fragment.setArguments(getIntent().getExtras());
         }
         else {
-            fragment =new Fragment();
+            fragment = new Fragment();
         }
         layout = (DrawerLayout) findViewById(R.id.nav_drawer_layout);
         getFragmentManager().beginTransaction().add(R.id.mainFrame,fragment).commit();
         ((NavigationView) findViewById(R.id.navigation_drawer)).setNavigationItemSelectedListener(this);
-        ImageButton imageButton= (ImageButton)findViewById(R.id.gallery_drawer_icon);
+        ImageButton imageButton= (ImageButton)findViewById(R.id.nav_drawer_icon);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ((DrawerLayout)findViewById(R.id.nav_drawer_layout)).openDrawer(GravityCompat.START);
             }
         });
-
-
-
     }
 
     @Override

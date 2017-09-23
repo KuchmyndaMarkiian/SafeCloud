@@ -1,36 +1,36 @@
 package cloud.safe.com.kuchmynda.mark.safecloud.Common;
 
 /**
- * Created by MARKAN on 15.09.2017.
+ * Created by Markiian Kuchmynda on 15.09.2017.
  */
 
 public final class ApiConnection {
     //region URL Constants
 
-    public static String ServerAdress = "http://192.168.0.100:57643";
-    //public static String ServerAdress = "http://192.168.75.220:57643";
+    public static final String ServerAddress = "http://192.168.0.101:57643";
+    //public static String ServerAddress = "http://192.168.75.220:57643";
     //region Authorization
 
-    public static String RegisterAdress = "/api/Account/Register";
-    public static String LoginAdress = "/Token";
-    public static String LogoutAdress = "/api/Account/LogOut";
+    public static final String RegisterAddress = "/api/Account/Register";
+    public static final String LoginAddress = "/Token";
+    public static String LogoutAddress = "/api/Account/LogOut";
     public static String UserInfo = "/api/Account/AccountInfo";
-    public static String AvatarAdress = "/api/Account/UpdateAvatar";
-    public static String RestorePasswordAdress = "/api/Account/RestorePassword";
+    public static String AvatarAddress = "/api/Account/UpdateAvatar";
+    public static String RestorePasswordAddress = "/api/Account/RestorePassword";
 
     //endregion
 
-    //region Gallery
+    //region Folder
 
-    public static String GalleryAdress = "/api/Gallery";
-    public static String GalleryListAdress = "/api/Gallery/List";
+    public static String FolderAddress = "/api/Folder";
+    public static final String FolderListAddress = "/api/Folder/List";
 
     //endregion
 
-    //region Picture
+    //region File
 
-    public static String DownloadPictureAdress = "/api/Picture/Download";
-    public static String PictureAdress = "/api/Picture";
+    public static String DownloadFileAddress = "/api/File/Download";
+    public static String FileAddress = "/api/File";
 
     //endregion
 
@@ -38,7 +38,7 @@ public final class ApiConnection {
 
     //region Types
 
-    public static String MimeJson = "application/json";
-    public static String MimeFormUnlencoded = "application/x-www-form-urlencoded";
+    public static final String MimeJson = "application/json";
+    public static final String MimeFormUnlencoded = "application/x-www-form-urlencoded";
     //endregion
 }

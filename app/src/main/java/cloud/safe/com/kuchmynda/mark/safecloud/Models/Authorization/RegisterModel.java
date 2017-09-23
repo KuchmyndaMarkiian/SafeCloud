@@ -1,7 +1,7 @@
 package cloud.safe.com.kuchmynda.mark.safecloud.Models.Authorization;
 
 /**
- * Created by MARKAN on 15.09.2017.
+ * Created by Markiian Kuchmynda on 15.09.2017.
  */
 public class RegisterModel extends LoginModel{
     private String firstName;

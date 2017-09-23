@@ -4,7 +4,7 @@
         <item android:title="Account"
             android:id="@+id/navmenu_account"
             android:icon="@drawable/ic_account_circle_black_48dp"/>
-        <item android:title="Galleries"
+        <item android:title="Home"
             android:id="@+id/navmenu_gallery"
             android:icon="@drawable/ic_menu_gallery"/>
         <item android:title="Log"

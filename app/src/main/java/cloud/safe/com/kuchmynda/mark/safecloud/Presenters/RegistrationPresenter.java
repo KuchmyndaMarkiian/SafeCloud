@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.text.TextUtils;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -13,36 +12,27 @@ import com.google.gson.reflect.TypeToken;
 import cloud.safe.com.kuchmynda.mark.safecloud.Common.ApiConnection;
 import cloud.safe.com.kuchmynda.mark.safecloud.Common.CommonData;
 import cloud.safe.com.kuchmynda.mark.safecloud.Infrastructure.Helpers.DialogInitializator;
-import cloud.safe.com.kuchmynda.mark.safecloud.Infrastructure.Services.AuthorizationService;
+import cloud.safe.com.kuchmynda.mark.safecloud.Infrastructure.Services.SafeCloudServices.AuthorizationService;
 import cloud.safe.com.kuchmynda.mark.safecloud.Infrastructure.Token;
 import cloud.safe.com.kuchmynda.mark.safecloud.Infrastructure.UserAccount;
 import cloud.safe.com.kuchmynda.mark.safecloud.Models.Authorization.LoginModel;
 import cloud.safe.com.kuchmynda.mark.safecloud.Views.Activities.NavigationDrawerActivity;
-import cloud.safe.com.kuchmynda.mark.safecloud.Views.Fragments.GalleryFragment;
+import cloud.safe.com.kuchmynda.mark.safecloud.Views.Fragments.StructureFragment;
 import cloud.safe.com.kuchmynda.mark.safecloud.Views.Fragments.RegisterFragment;
 import cloud.safe.com.kuchmynda.mark.safecloud.Models.Authorization.RegisterModel;
 
 /**
- * Created by MARKAN on 15.09.2017.
+ * Created by Markiian Kuchmynda on 15.09.2017.
  */
 
 public class RegistrationPresenter extends PresenterBase<RegisterFragment> {
-    RegisterModel registerModel;
-
-    @Override
-    protected void execute() {
-    }
+    private RegisterModel registerModel;
 
     @Override
     protected void initModel() {
         if (registerModel == null) {
             registerModel = new RegisterModel();
         }
-    }
-
-    @Override
-    protected void errorHandler(String message) {
-        Toast.makeText(view.getActivity(), message, Toast.LENGTH_SHORT).show();
     }
 
     public void setLogin(String text) {
@@ -79,10 +69,10 @@ public class RegistrationPresenter extends PresenterBase<RegisterFragment> {
                 TextUtils.isEmpty(registerModel.getConfirmPassword()) ||
                 (registerModel.getAvatar() == null || registerModel.getAvatar().length <= 0)
                 ) {
-            errorHandler("Empty data or picture isn`t selected");
+            messageHandler("Empty data or picture isn`t selected");
         }
         else if(!registerModel.getPassword().contentEquals(registerModel.getConfirmPassword())){
-            errorHandler("Password and confirm password aren`t identical");
+            messageHandler("Password and confirm password aren`t identical");
         }
         else {
             RegisterAsyncTask registerAsyncTask=new RegisterAsyncTask(view.getActivity());
@@ -127,11 +117,12 @@ public class RegistrationPresenter extends PresenterBase<RegisterFragment> {
                 }
             });
             if (token == null) {
-                errorHandler(service.getError());
+                messageHandler(service.getError());
             } else {
                 UserAccount.getCurrentAccount().setToken(token);
+                UserAccount.save(view.getActivity());
                 Intent intent=new Intent(activity, NavigationDrawerActivity.class);
-                intent.putExtra(CommonData.FRAGMENT_EXTRA, GalleryFragment.ID);
+                intent.putExtra(CommonData.FRAGMENT_ID_EXTRA, StructureFragment.ID);
                 activity.startActivity(intent);
                 activity.finish();
             }
@@ -139,16 +130,15 @@ public class RegistrationPresenter extends PresenterBase<RegisterFragment> {
 
         @Override
         protected Token doInBackground(RegisterModel... params) {
-            service = new AuthorizationService(ApiConnection.ServerAdress);
-            if(service.signUp(ApiConnection.RegisterAdress, params[0])) {
+            service = new AuthorizationService(ApiConnection.ServerAddress);
+            if(service.signUp(ApiConnection.RegisterAddress, params[0])) {
                 LoginModel loginModel=new LoginModel();
                 loginModel.setEmail(registerModel.getEmail());
                 loginModel.setPassword(registerModel.getPassword());
-                if (service.signIn(ApiConnection.LoginAdress, loginModel)) {
+                if (service.signIn(ApiConnection.LoginAddress, loginModel)) {
                     Gson gson = new Gson();
                     String body = service.getLastResponseBody();
-                    Token token = gson.fromJson(body, new TypeToken<Token>(){}.getType());
-                    return token;
+                    return gson.fromJson(body, new TypeToken<Token>(){}.getType());
                 }
             }
             return null;

@@ -5,52 +5,33 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.text.TextUtils;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import java.util.concurrent.ExecutionException;
-
 import cloud.safe.com.kuchmynda.mark.safecloud.Common.ApiConnection;
 import cloud.safe.com.kuchmynda.mark.safecloud.Common.CommonData;
 import cloud.safe.com.kuchmynda.mark.safecloud.Infrastructure.Helpers.DialogInitializator;
-import cloud.safe.com.kuchmynda.mark.safecloud.Infrastructure.Services.AuthorizationService;
+import cloud.safe.com.kuchmynda.mark.safecloud.Infrastructure.Services.SafeCloudServices.AuthorizationService;
 import cloud.safe.com.kuchmynda.mark.safecloud.Infrastructure.Token;
 import cloud.safe.com.kuchmynda.mark.safecloud.Infrastructure.UserAccount;
-import cloud.safe.com.kuchmynda.mark.safecloud.R;
 import cloud.safe.com.kuchmynda.mark.safecloud.Views.Activities.NavigationDrawerActivity;
-import cloud.safe.com.kuchmynda.mark.safecloud.Views.Fragments.GalleryFragment;
+import cloud.safe.com.kuchmynda.mark.safecloud.Views.Fragments.StructureFragment;
 import cloud.safe.com.kuchmynda.mark.safecloud.Views.Fragments.LoginFragment;
 import cloud.safe.com.kuchmynda.mark.safecloud.Models.Authorization.LoginModel;
 
 /**
- * Created by MARKAN on 15.09.2017.
+ * Created by Markiian Kuchmynda on 15.09.2017.
  */
 
 public class LoginPresenter extends PresenterBase<LoginFragment> {
-    LoginModel loginModel;
-
-    @Override
-    protected void execute() {
-
-    }
+    private LoginModel loginModel;
 
     @Override
     protected void initModel() {
         if (loginModel == null) {
             loginModel = new LoginModel();
         }
-    }
-
-    @Override
-    protected void errorHandler(final String message) {
-        view.getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(view.getActivity(), message, Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     public void setLogin(String text) {
@@ -65,7 +46,7 @@ public class LoginPresenter extends PresenterBase<LoginFragment> {
 
     public void signIn() {
         if (loginModel == null || TextUtils.isEmpty(loginModel.getEmail()) || TextUtils.isEmpty(loginModel.getPassword())) {
-            errorHandler("Empty fields");
+            messageHandler("Empty fields");
         } else {
             SignInAsyncTask signInAsyncTask = new SignInAsyncTask(view.getActivity());
             signInAsyncTask.execute(loginModel);
@@ -94,11 +75,12 @@ public class LoginPresenter extends PresenterBase<LoginFragment> {
             super.onPostExecute(token);
             dialog.dismiss();
             if (token == null) {
-                errorHandler(service.getError());
+                messageHandler(service.getError());
             } else {
                 UserAccount.getCurrentAccount().setToken(token);
+                UserAccount.save(view.getActivity());
                 Intent intent=new Intent(activity, NavigationDrawerActivity.class);
-                intent.putExtra(CommonData.FRAGMENT_EXTRA, GalleryFragment.ID);
+                intent.putExtra(CommonData.FRAGMENT_ID_EXTRA, StructureFragment.ID);
                 activity.startActivity(intent);
                 activity.finish();
             }
@@ -106,12 +88,11 @@ public class LoginPresenter extends PresenterBase<LoginFragment> {
 
         @Override
         protected Token doInBackground(LoginModel... params) {
-            service = new AuthorizationService(ApiConnection.ServerAdress);
-            if (service.signIn(ApiConnection.LoginAdress, params[0])) {
+            service = new AuthorizationService(ApiConnection.ServerAddress);
+            if (service.signIn(ApiConnection.LoginAddress, params[0])) {
                 Gson gson = new Gson();
                 String body=service.getLastResponseBody();
-                Token token = gson.fromJson(body, new TypeToken<Token>(){}.getType());
-                return token;
+                return gson.fromJson(body, new TypeToken<Token>(){}.getType());
             }
             return null;
         }

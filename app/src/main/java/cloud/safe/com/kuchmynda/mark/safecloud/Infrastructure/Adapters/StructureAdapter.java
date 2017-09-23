@@ -8,19 +8,19 @@ import android.widget.BaseAdapter;
 
 import java.util.ArrayList;
 
-import cloud.safe.com.kuchmynda.mark.safecloud.UI.CustomControls.GalleryItem;
-import cloud.safe.com.kuchmynda.mark.safecloud.Models.GalleryItemModel;
+import cloud.safe.com.kuchmynda.mark.safecloud.UI.CustomControls.StructureItem;
+import cloud.safe.com.kuchmynda.mark.safecloud.Models.StructureItemModel;
 
 /**
- * Created by MARKAN on 13.09.2017.
+ * Created by Markiian Kuchmynda on 13.09.2017.
  */
 
-public class GalleryAdapter extends BaseAdapter {
+public class StructureAdapter extends BaseAdapter {
     private int position=0;
-    private Context activity;
-    private ArrayList<GalleryItemModel> itemModels;
+    private final Context activity;
+    private final ArrayList<StructureItemModel> itemModels;
 
-    public GalleryAdapter(ArrayList<GalleryItemModel> itemModels, Activity activity) {
+    public StructureAdapter(ArrayList<StructureItemModel> itemModels, Activity activity) {
         this.itemModels = itemModels;
         this.activity=activity;
     }
@@ -44,9 +44,9 @@ public class GalleryAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null)
         {
-            GalleryItem itemGallery =
-                    new GalleryItem(activity);
-            itemGallery.setData((GalleryItemModel) getItem(position));
+            StructureItem itemGallery =
+                    new StructureItem(activity);
+            itemGallery.setData((StructureItemModel) getItem(position));
             return itemGallery;
         }
         return null;

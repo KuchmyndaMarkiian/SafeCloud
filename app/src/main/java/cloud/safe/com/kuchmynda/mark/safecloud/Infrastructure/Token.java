@@ -2,8 +2,6 @@ package cloud.safe.com.kuchmynda.mark.safecloud.Infrastructure;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.Date;
-
 public class Token {
     @SerializedName("access_token")
     private String AccessToken;

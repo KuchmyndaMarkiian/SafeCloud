@@ -22,20 +22,20 @@ import cloud.safe.com.kuchmynda.mark.safecloud.R;
 
 import static cloud.safe.com.kuchmynda.mark.safecloud.Common.CommonData.IMAGE_PICK ;
 
-public class RegisterFragment extends Fragment {
-    RegistrationPresenter presenter;
+public class RegisterFragment extends Fragment implements FragmentBase {
+    private RegistrationPresenter presenter;
 
     public RegisterFragment() {
         super();
     }
 
-    View.OnClickListener clickListener = new View.OnClickListener() {
+    private final View.OnClickListener clickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             presenter.signUp();
         }
     };
-    View.OnClickListener imagePick = new View.OnClickListener() {
+    private final View.OnClickListener imagePick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             ImagePicker.pickImage(getActivity(), "Pick your image:", IMAGE_PICK, false);
@@ -45,8 +45,9 @@ public class RegisterFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Bitmap picked = ImagePicker.getImageFromResult(getActivity(), requestCode, resultCode, data);
-        ByteArrayOutputStream outputStream=new ByteArrayOutputStream();
-        picked.compress(Bitmap.CompressFormat.PNG,100,outputStream);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        assert picked != null;
+        picked.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
         presenter.setAvatar(outputStream.toByteArray());
         ImageView imageView = (ImageView) this.getView().findViewById(R.id.registration_image);
         imageView.setImageBitmap(picked);
@@ -60,6 +61,12 @@ public class RegisterFragment extends Fragment {
         }
         presenter.takeView(this);
         View view = inflater.inflate(R.layout.fragment_registration, container, false);
+        initView(view);
+        return view;
+    }
+
+    @Override
+    public void initView(View view) {
         ImagePicker.setMinQuality(300, 300);
         view.findViewById(R.id.register_button).setOnClickListener(clickListener);
         view.findViewById(R.id.registration_image).setOnClickListener(imagePick);
@@ -165,8 +172,10 @@ public class RegisterFragment extends Fragment {
             }
         });
         //endregion
-        return view;
+    }
+
+    @Override
+    public void initArguments() {
+
     }
 }
-
-

@@ -14,7 +14,6 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_aaaaaaaaa">aaaaaaaaa</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_start">StartActivity</string>
     <string name="title_activity_authorization">AuthorizationActivity</string>

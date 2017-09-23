@@ -1,5 +1,11 @@
 package cloud.safe.com.kuchmynda.mark.safecloud.Infrastructure;
 
+import android.content.Context;
+
+import cloud.safe.com.kuchmynda.mark.safecloud.Common.CommonData;
+import cloud.safe.com.kuchmynda.mark.safecloud.Common.CustomTypes.Tuple;
+import cloud.safe.com.kuchmynda.mark.safecloud.Infrastructure.Services.Preferences.AccountPreference;
+
 /**
  * Created by Markiian Kuchmynda on 15.09.2017.
  */
@@ -13,7 +19,7 @@ public class UserAccount {
     private byte[] avatar;
     private Token token;
 
-    public UserAccount() {
+    private UserAccount() {
     }
 
     public UserAccount(String email, String name, String surname, byte[] avatar) {
@@ -68,5 +74,22 @@ public class UserAccount {
 
     public void setToken(Token token) {
         this.token = token;
+    }
+
+    public Tuple<String, String> getApiAuthorization() {
+        return new Tuple<>("Authorization", String.format("bearer  %s", token.getAccessToken()));
+    }
+
+    public static void save(Context contex) {
+        if (getCurrentAccount() != null) {
+            AccountPreference accountPreference = new AccountPreference(contex.getSharedPreferences(CommonData.UserPreference, Context.MODE_PRIVATE));
+            accountPreference.save(instance);
+        }
+    }
+
+    public static void read(Context context) {
+        AccountPreference accountPreference = new AccountPreference(context.getSharedPreferences(CommonData.UserPreference, Context.MODE_PRIVATE));
+        if (accountPreference.isLogged())
+            instance = accountPreference.read();
     }
 }

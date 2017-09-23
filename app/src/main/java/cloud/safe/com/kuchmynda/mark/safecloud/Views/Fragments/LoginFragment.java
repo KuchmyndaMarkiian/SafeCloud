@@ -16,14 +16,14 @@ import cloud.safe.com.kuchmynda.mark.safecloud.Infrastructure.Database.SqliteMan
 import cloud.safe.com.kuchmynda.mark.safecloud.Presenters.LoginPresenter;
 import cloud.safe.com.kuchmynda.mark.safecloud.R;
 
-public class LoginFragment extends Fragment {
-    LoginPresenter presenter;
+public class LoginFragment extends Fragment implements FragmentBase {
+    private LoginPresenter presenter;
 
     public LoginFragment() {
         super();
     }
 
-    View.OnClickListener clickListener = new View.OnClickListener() {
+    private final View.OnClickListener clickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             presenter.signIn();
@@ -35,7 +35,7 @@ public class LoginFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (presenter == null) {
             presenter = new LoginPresenter();
-            SqliteManager sqliteManager=new SqliteManager(getContext());
+            SqliteManager sqliteManager = new SqliteManager(getContext());
             try {
                 sqliteManager.close();
             } catch (IOException e) {
@@ -43,14 +43,24 @@ public class LoginFragment extends Fragment {
             }
         }
         presenter.takeView(this);
-
         View view = inflater.inflate(R.layout.fragment_login, container, false);
+        initView(view);
+        return view;
+    }
+
+    @Override
+    public void initView(View view) {
         view.findViewById(R.id.login_button).setOnClickListener(clickListener);
+        EditText login=(EditText) view.findViewById(R.id.login_username);
+        EditText password= (EditText) view.findViewById(R.id.login_password);
+        login.setText("harrisonford@gmil.com");
+        password.setText("Mark95!");
         //region EditText events
-        ((EditText)view.findViewById(R.id.login_username)).addTextChangedListener(new TextWatcher() {
-            void setData(String text){
+        login.addTextChangedListener(new TextWatcher() {
+            void setData(String text) {
                 presenter.setLogin(text);
             }
+
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 setData(s.toString());
@@ -66,10 +76,11 @@ public class LoginFragment extends Fragment {
                 setData(s.toString());
             }
         });
-        ((EditText)view.findViewById(R.id.login_password)).addTextChangedListener(new TextWatcher() {
-            void setData(String text){
+        password.addTextChangedListener(new TextWatcher() {
+            void setData(String text) {
                 presenter.setPassword(text);
             }
+
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 setData(s.toString());
@@ -86,6 +97,10 @@ public class LoginFragment extends Fragment {
             }
         });
         //endregion
-        return view;
+    }
+
+    @Override
+    public void initArguments() {
+
     }
 }
