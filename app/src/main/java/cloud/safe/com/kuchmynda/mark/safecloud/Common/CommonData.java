@@ -18,4 +18,6 @@ public class CommonData {
     public static final int STATUS_FINISH = 200;
     public static final int STATUS_START = 200;
     public static final int STATUS_ERROR = -100;
+
+    public static final String CURRENT_FOLDER = "parentId";
 }

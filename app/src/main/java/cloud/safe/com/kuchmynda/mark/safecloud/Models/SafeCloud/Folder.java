@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Folder extends FileStructureBase implements Serializable {
 
-    @SerializedName("Files")
+    /*@SerializedName("Files")
     private List<File> files = new ArrayList<>();
 
 
@@ -20,5 +20,5 @@ public class Folder extends FileStructureBase implements Serializable {
     @SerializedName("Files")
     public void setFiles(List<File> files) {
         this.files = files;
-    }
+    }*/
 }

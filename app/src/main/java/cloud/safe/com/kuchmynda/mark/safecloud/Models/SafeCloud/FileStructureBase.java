@@ -7,7 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public abstract class FileStructureBase implements Serializable {
+public class FileStructureBase implements Serializable {
     @SerializedName("Id")
     private String id;
     @SerializedName("ParentId")
@@ -20,6 +20,16 @@ public abstract class FileStructureBase implements Serializable {
     private String dateTime;
     @SerializedName("AttributeHasPublicAccess")
     private boolean hasPublicAccess;
+
+    @SerializedName("Size")
+    private Integer size;
+    public Integer getSize() {
+        return size;
+    }
+
+    public void setSize(Integer size) {
+        this.size = size;
+    }
 
     @SerializedName("Id")
     public String getId() {

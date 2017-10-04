@@ -7,8 +7,8 @@ package cloud.safe.com.kuchmynda.mark.safecloud.Common;
 public final class ApiConnection {
     //region URL Constants
 
-    public static final String ServerAddress = "http://192.168.0.101:57643";
-    //public static String ServerAddress = "http://192.168.75.220:57643";
+    //public static final String ServerAddress = "http://192.168.0.101:57643";
+    public static String ServerAddress = "http://192.168.72.194:57643";
     //region Authorization
 
     public static final String RegisterAddress = "/api/Account/Register";
@@ -19,6 +19,8 @@ public final class ApiConnection {
     public static String RestorePasswordAddress = "/api/Account/RestorePassword";
 
     //endregion
+
+    public static String structureAddress = "/api/Folder/Structure";
 
     //region Folder
 

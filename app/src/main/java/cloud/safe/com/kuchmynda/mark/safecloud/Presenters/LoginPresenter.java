@@ -81,6 +81,7 @@ public class LoginPresenter extends PresenterBase<LoginFragment> {
                 UserAccount.save(view.getActivity());
                 Intent intent=new Intent(activity, NavigationDrawerActivity.class);
                 intent.putExtra(CommonData.FRAGMENT_ID_EXTRA, StructureFragment.ID);
+                intent.putExtra(CommonData.CURRENT_FOLDER, "");
                 activity.startActivity(intent);
                 activity.finish();
             }

@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
+import android.util.Log;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -29,6 +30,30 @@ public class SqliteManager implements Closeable {
         sqLiteDatabase = sqlHelper.getWritableDatabase();
     }
 
+    //region DML scripts
+    public void insert(FileStructureBase base){
+        if(base.getSize()==null)
+        {
+            Folder folder=new Folder();
+            folder.setDateTime(base.getDateTime());
+            folder.setDescription(base.getDescription());
+            folder.setHasPublicAccess(base.isHasPublicAccess());
+            folder.setId(base.getId());
+            folder.setName(base.getName());
+            folder.setParentId(base.getParentId());
+            insert(folder);
+        }
+        else {
+            File file=new File();
+            file.setDateTime(base.getDateTime());
+            file.setDescription(base.getDescription());
+            file.setHasPublicAccess(base.isHasPublicAccess());
+            file.setId(base.getId());
+            file.setName(base.getName());
+            file.setParentId(base.getParentId());
+            insert(file);
+        }
+    }
     public void insert(Folder folder)
     {
         insert(SqlData.FolderTable,new Tuple(SqlData.COLUMN_ID, folder.getId()),
@@ -38,6 +63,7 @@ public class SqliteManager implements Closeable {
                 new Tuple(SqlData.COLUMN_PUBLIC_ACCESS,folder.isHasPublicAccess()),
                 new Tuple(SqlData.COLUMN_PARENT_ID,folder.getParentId()));
     }
+
     public void insert(File file)
     {
         insert(SqlData.FileTable,new Tuple(SqlData.COLUMN_ID, file.getId()),
@@ -48,15 +74,72 @@ public class SqliteManager implements Closeable {
                 new Tuple(SqlData.COLUMN_PARENT_ID,file.getParentId()),
                 new Tuple(SqlData.COLUMN_GEOLOCATION,file.getGeolocation()));
     }
-    public int count(String table){
-        SQLiteStatement sqLiteStatement= sqLiteDatabase.compileStatement("select count(*) from "+ table);
-        return (int) sqLiteStatement.simpleQueryForLong();
-    }
-
     private void insert(String tableName, Tuple... cols) {
         ContentValues contentValues = formatValues(cols);
         sqLiteDatabase.insert(tableName, null, contentValues);
     }
+    //todo: need to duplicate scripts for columns
+    public void update(FileStructureBase base){
+        if(base.getSize()==null)
+        {
+            Folder folder=new Folder();
+            folder.setDateTime(base.getDateTime());
+            folder.setDescription(base.getDescription());
+            folder.setHasPublicAccess(base.isHasPublicAccess());
+            folder.setId(base.getId());
+            folder.setName(base.getName());
+            folder.setParentId(base.getParentId());
+            update(folder);
+        }
+        else {
+            File file=new File();
+            file.setDateTime(base.getDateTime());
+            file.setDescription(base.getDescription());
+            file.setHasPublicAccess(base.isHasPublicAccess());
+            file.setId(base.getId());
+            file.setName(base.getName());
+            file.setParentId(base.getParentId());
+            update(file);
+        }
+    }
+    public void update(Folder folder) {
+        if (!exists(folder)) return;
+        update(SqlData.FolderTable,
+                new Tuple(SqlData.COLUMN_ID, folder.getId()),
+                new Tuple(SqlData.COLUMN_HEADER, folder.getName()),
+                new Tuple(SqlData.COLUMN_DESCRIPTION, folder.getDescription()),
+                new Tuple(SqlData.COLUMN_CREATED_DATE, folder.getDateTime()),
+                new Tuple(SqlData.COLUMN_PUBLIC_ACCESS, folder.isHasPublicAccess()),
+                new Tuple(SqlData.COLUMN_PARENT_ID, folder.getParentId()));
+    }
+    public void update(File file) {
+        if (!exists(file)) return;
+        update(SqlData.FileTable,
+                new Tuple(SqlData.COLUMN_ID, file.getId()),
+                new Tuple(SqlData.COLUMN_HEADER,file.getName()),
+                new Tuple(SqlData.COLUMN_DESCRIPTION,file.getDescription()),
+                new Tuple(SqlData.COLUMN_CREATED_DATE,file.getDateTime()),
+                new Tuple(SqlData.COLUMN_PUBLIC_ACCESS,file.isHasPublicAccess()),
+                new Tuple(SqlData.COLUMN_PARENT_ID,file.getParentId()),
+                new Tuple(SqlData.COLUMN_GEOLOCATION,file.getGeolocation()));
+    }
+    private void update(String table, Tuple...cols){
+        ContentValues contentValues= formatValues(cols);
+        String id=null;
+        for (Tuple col : cols) {
+            if(col.getKey().equals(SqlData.COLUMN_ID))
+                id= (String) col.getValue();
+        }
+        if(id!=null)
+            Log.i("Updating SQL", String.valueOf(sqLiteDatabase.update(table,contentValues,String.format(" %s = ?", SqlData.COLUMN_ID),new String[]{ id})));
+    }
+
+    public void delete(FileStructureBase base){
+        String table= base instanceof Folder?SqlData.FolderTable:SqlData.FileTable;
+        sqLiteDatabase.delete(table,String.format("%s = ?", SqlData.COLUMN_ID), new String[]{base.getId()});
+    }
+    //endregion
+    //region SELECTion scripts
     public Cursor select(String tableName) {
         return sqLiteDatabase.query(tableName, null, null, null, null, null, null);
     }
@@ -64,10 +147,15 @@ public class SqliteManager implements Closeable {
         return sqLiteDatabase.query(tableName, null, where, selectionArgs, null, null, null);
     }
     public boolean exists(FileStructureBase structureBase) {
-        String table= structureBase instanceof Folder?SqlData.FolderTable:SqlData.FileTable;
+        String table= structureBase.getSize()==null?SqlData.FolderTable:SqlData.FileTable;
         SQLiteStatement sqLiteStatement = sqLiteDatabase.compileStatement(String.format("select count(*) from %s where Id='%s'",table, structureBase.getId()));
         return (int) sqLiteStatement.simpleQueryForLong() > 0;
     }
+    public int count(String table, String id){
+        SQLiteStatement sqLiteStatement = sqLiteDatabase.compileStatement(String.format("select count(*) from %s where ParentId=%s",table, id.equals("NULL")?id:String.format("'%s'")));
+        return (int) sqLiteStatement.simpleQueryForLong();
+    }
+    //endregion
 
     private static ContentValues formatValues(Tuple... cols) {
         ContentValues contentValues = new ContentValues();

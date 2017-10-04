@@ -28,8 +28,7 @@ import cloud.safe.com.kuchmynda.mark.safecloud.Common.SqlData;
 import cloud.safe.com.kuchmynda.mark.safecloud.Infrastructure.Adapters.StructureAdapter;
 import cloud.safe.com.kuchmynda.mark.safecloud.Infrastructure.Database.SqliteManager;
 import cloud.safe.com.kuchmynda.mark.safecloud.Infrastructure.Services.DownloadService;
-import cloud.safe.com.kuchmynda.mark.safecloud.Models.SafeCloud.File;
-import cloud.safe.com.kuchmynda.mark.safecloud.Models.SafeCloud.Folder;
+import cloud.safe.com.kuchmynda.mark.safecloud.Models.SafeCloud.FileStructureBase;
 import cloud.safe.com.kuchmynda.mark.safecloud.Models.StructureItemModel;
 import cloud.safe.com.kuchmynda.mark.safecloud.Presenters.StructurePresenter;
 import cloud.safe.com.kuchmynda.mark.safecloud.R;
@@ -41,6 +40,8 @@ public class StructureFragment extends Fragment implements FragmentBase {
     private BroadcastReceiver downloadReceiver;
     private StructurePresenter presenter;
     public static final String broadcast_action="UpdateData";
+
+    private String parentId=null;
     final AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -82,55 +83,62 @@ public class StructureFragment extends Fragment implements FragmentBase {
             public void onReceive(Context context, Intent intent) {
                 int state = intent.getIntExtra(CommonData.PARAM_STATE, -1);
                 SqliteManager manager = new SqliteManager(getActivity());
-                //todo: need fix it.
-                structureItemModels=new ArrayList<>();
+                //todo: need fix it and reorganize API to /Structure
+                structureItemModels = new ArrayList<>();
                 if (state == CommonData.STATUS_ERROR) {
                     presenter.messageHandler("Internal server error.");
                 }
                 if (state == CommonData.STATUS_FINISH) {
                     String json = intent.getStringExtra(CommonData.FRAGMENT_MODEL_EXTRA);
                     if (json != null) {
-                        List<Folder> folderList = (new Gson())
-                                .fromJson(json, new TypeToken<ArrayList<Folder>>() {
+                        List<FileStructureBase> structures = (new Gson())
+                                .fromJson(json, new TypeToken<ArrayList<FileStructureBase>>() {
                                 }.getType());
-                        if (folderList.size() > 0) {
-                            for (Folder folder : folderList) {
+                        if (structures.size() > 0) {
+                            if (getParentId() == null)
+                                setParentId(structures.get(0).getParentId());
+                            for (FileStructureBase folder : structures) {
                                 if (!manager.exists(folder))
                                     manager.insert(folder);
-                                List<File> files = folder.getFiles();
+                                else manager.update(folder);
+                                /*List<File> files = folder.getFiles();
                                 if (files.size() > 0) {
                                     for (File file : files) {
                                         if (!manager.exists(file))
                                             manager.insert(file);
+                                        else manager.update(file);
                                     }
-                                }
+                                }*/
                             }
                         }
                     }
                 }
-                String[] tables=new String[]{SqlData.FolderTable,SqlData.FileTable};
-                Cursor cursor;
-                for (String table :tables) {
-                    cursor= model==null?manager.select(table,SqlData.COLUMN_PARENT_ID+" IS NULL")
-                            :manager.select(table,SqlData.COLUMN_PARENT_ID+" = ?",model.getId());
-                    if (cursor.moveToFirst()) {
-                        int idIndex = cursor.getColumnIndex(SqlData.COLUMN_ID);
-                        int headerIndex = cursor.getColumnIndex(SqlData.COLUMN_HEADER);
-                        int dateIndex = cursor.getColumnIndex(SqlData.COLUMN_CREATED_DATE);
-                        int parentIndex = cursor.getColumnIndex(SqlData.COLUMN_PARENT_ID);
-                        do {
-                            try {
-                                String parentId = cursor.getString(parentIndex);
-                                structureItemModels.add(new StructureItemModel(cursor.getString(idIndex), parentId, cursor.getString(headerIndex),
-                                        (new SimpleDateFormat("yyyy-MM-dd'T'HH:mm")).parse(cursor.getString(dateIndex))));
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
-                        } while (cursor.moveToNext());
-                    }
-                }
+                if (getParentId() != null) {
+                    String[] tables = new String[]{SqlData.FolderTable, SqlData.FileTable};
+                    Cursor cursor;
 
-                listView.setAdapter(new StructureAdapter(structureItemModels, getActivity()));
+                    for (String table : tables) {
+                        cursor = manager.select(table, SqlData.COLUMN_PARENT_ID + " = ?", getParentId());
+                        if (cursor.moveToFirst()) {
+                            int idIndex = cursor.getColumnIndex(SqlData.COLUMN_ID);
+                            int headerIndex = cursor.getColumnIndex(SqlData.COLUMN_HEADER);
+                            int dateIndex = cursor.getColumnIndex(SqlData.COLUMN_CREATED_DATE);
+                            int parentIndex = cursor.getColumnIndex(SqlData.COLUMN_PARENT_ID);
+                            do {
+                                try {
+                                    synchronized (structureItemModels){
+                                    String parentId = cursor.getString(parentIndex);
+                                    structureItemModels.add(new StructureItemModel(cursor.getString(idIndex), parentId, cursor.getString(headerIndex),
+                                            (new SimpleDateFormat("yyyy-MM-dd'T'HH:mm")).parse(cursor.getString(dateIndex))));}
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                            } while (cursor.moveToNext());
+                        }
+                    }
+
+                    listView.setAdapter(new StructureAdapter(structureItemModels, getActivity()));
+                }
             }
         };
         IntentFilter filter = new IntentFilter(broadcast_action);
@@ -143,9 +151,10 @@ public class StructureFragment extends Fragment implements FragmentBase {
         Activity parent = getActivity();
         TextView view1=(TextView) parent.findViewById(R.id.appbar_header_1);
         TextView view2=(TextView) parent.findViewById(R.id.appbar_header_2);
-        if (args!=null && args.containsKey(CommonData.FRAGMENT_MODEL_EXTRA)) {
+        if (args!=null && args.containsKey(CommonData.CURRENT_FOLDER)) {
+            setParentId(getArguments().getString(CommonData.CURRENT_FOLDER));
             model = (StructureItemModel) getArguments().getSerializable(CommonData.FRAGMENT_MODEL_EXTRA);
-            assert model != null;
+            setParentId(model.getId());
             view1.setText(model.getHeader());
             view2.setText("(" + (new SimpleDateFormat("yyyy-MM-dd").format(model.getDate())) + ")");
         }
@@ -153,7 +162,9 @@ public class StructureFragment extends Fragment implements FragmentBase {
             view1.setText("SafeCloud");
             view2.setText("");
         }
-        getActivity().startService(new Intent(getActivity(),DownloadService.class));
+        Intent service=new Intent(getActivity(),DownloadService.class);
+        service.putExtra(CommonData.CURRENT_FOLDER, getParentId());
+        getActivity().startService(service);
     }
 
     @Override
@@ -163,4 +174,11 @@ public class StructureFragment extends Fragment implements FragmentBase {
     }
 
 
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+    }
 }

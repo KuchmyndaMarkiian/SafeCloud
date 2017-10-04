@@ -25,7 +25,6 @@ public class DownloadService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-
         downloadThread = new DownloadThread();
         executor = Executors.newSingleThreadExecutor();
     }
@@ -33,6 +32,7 @@ public class DownloadService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        downloadThread.setId(intent.getExtras().getString(CommonData.CURRENT_FOLDER));
         executor.execute(downloadThread);
         return super.onStartCommand(intent, flags, startId);
     }
@@ -45,6 +45,8 @@ public class DownloadService extends Service {
 
     private class DownloadThread implements Runnable {
 
+        private String id;
+
         @Override
         public void run() {
             OkHttpManager httpManager = new OkHttpManager(ApiConnection.ServerAddress);
@@ -54,7 +56,10 @@ public class DownloadService extends Service {
                 intent.putExtra(CommonData.PARAM_STATE, CommonData.STATUS_START);
                 sendBroadcast(intent);
 
-                httpManager.get(ApiConnection.FolderListAddress);
+                String url=ApiConnection.structureAddress;
+                if(id!=null && !id.equals(""))
+                    url+="?Id="+id;
+                httpManager.get(url);
                 int state = CommonData.STATUS_FINISH;
                 if (httpManager.isSuccessful()) {
                     intent.putExtra(CommonData.FRAGMENT_MODEL_EXTRA, httpManager.getStringResult());
@@ -68,6 +73,10 @@ public class DownloadService extends Service {
                 e.printStackTrace();
             }
             stopSelf();
+        }
+
+        public void setId(String id) {
+            this.id = id;
         }
     }
 }
